@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
-var cors=require('cors')
+
 // Predefined questions and answers
 const qaPairs = [
     { question: "What is your name?", answer: "Hi! Welcome to BotPenguin. I'll be assisting you here today." },
