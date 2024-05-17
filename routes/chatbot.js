@@ -2,37 +2,108 @@ const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
 
-// Predefined questions and answers
-const qaPairs = [
-    { question: "What is your name?", answer: "Hi! Welcome to BotPenguin. I'll be assisting you here today." },
-    { question: "How are you?", answer: "I'm doing well, thank you!" },
-    { question: "What can you do?", answer: "I can answer your questions." },
-    { question: "What query do you have?", answer: "I have query with abc" },
-];
-
-
-
 router.use(bodyParser.json());
 
-// Endpoint to get predefined questions
+// Predefined questions and answers with nested sets
+const qaSets = [
+    [
+        { 
+            question: "Start!", 
+            answer: "Hi! I'll be assisting you here today.",
+            nextSet: [
+                { 
+                    question: "How to start using vectorDb?", 
+                    answer: "To start using vectorDb, follow these steps...",
+                    nextSet: [
+                        { 
+                            question: "Step one", 
+                            answer: "Go to the sidebar and click on the search icon.",
+                            nextSet: [
+                                { 
+                                    question: "Step two", 
+                                    answer: "Then go to the people section and apply the filter you want to get the leads within a minute.",
+                                    nextSet: [
+                                        { 
+                                            question: "Next Step", 
+                                            answer: "Continue with the next steps...",
+                                            nextSet: [
+                                                {
+                                                    question: "Step three",
+                                                    answer: "Next instruction..."
+                                                },
+                                                {
+                                                    question: "Step four",
+                                                    answer: "Next instruction..."
+                                                },
+                                                // Add more steps as needed
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    question: "I face a technical problem with Engage?", 
+                    answer: "Please describe the problem and share a full-page screenshot (including the search bar) of the issue, and the team will be happy to help."
+                },
+                { 
+                    question: "How to start using Engage?", 
+                    answer: "To start using Engage, follow these steps...",
+                    nextSet: [
+                        { 
+                            question: "Step one", 
+                            answer: "Go to the sidebar and click on the Engage tab.",
+                            nextSet: [
+                                { 
+                                    question: "Step two", 
+                                    answer: "Then follow the instructions provided in the Engage setup wizard."
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+];
+
+// Endpoint to get the initial set of questions
 router.get("/questions", (req, res) => {
-    const questions = qaPairs.map(pair => pair.question);
+    const questions = qaSets[0].map(pair => pair.question);
     res.json({ questions });
 });
 
+// Endpoint to handle user responses and return the next set of questions
 router.post("/chat", (req, res) => {
     const { message } = req.body;
+    let reply = "I'm sorry, I don't understand your question.";
+    let nextQuestions = [];
 
-    // Find a matching question in predefined QA pairs
-    const qaPair = qaPairs.find(pair => pair.question.toLowerCase() === message.toLowerCase());
+    console.log("User's message:", message); // Debugging statement
 
-    if (qaPair) {
-        // If a match is found, send the corresponding answer
-        res.json({ reply: qaPair.answer });
-    } else {
-        // If no match is found, respond with a default message
-        res.json({ reply: "I'm sorry, I don't understand your question." });
+    // Function to find the matching question and its nested set
+    function findQaPair(questions) {
+        for (const pair of questions) {
+            if (pair.question.toLowerCase() === message.trim().toLowerCase()) {
+                reply = pair.answer;
+                if (pair.nextSet) {
+                    nextQuestions = pair.nextSet.map(q => q.question);
+                }
+                return;
+            } else if (pair.nextSet) {
+                findQaPair(pair.nextSet); // Recursively search nested sets
+            }
+        }
     }
+
+    findQaPair(qaSets[0]); // Start searching from the initial set of questions
+
+    console.log("Reply:", reply); // Debugging statement
+    console.log("Next questions:", nextQuestions); // Debugging statement
+
+    res.json({ reply, nextQuestions });
 });
 
 module.exports = router;
