@@ -49,7 +49,7 @@ const qaSets = [
                     answer: "Please describe the problem and share a full-page screenshot (including the search bar) of the issue, and the team will be happy to help."
                 },
                 { 
-                    question: "How to start using VectorDb?", 
+                    question: "How to apply filters?", 
                     answer: "To start using VectorDb, follow these steps...",
                     nextSet: [
                         { 
