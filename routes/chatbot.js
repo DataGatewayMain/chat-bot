@@ -45,20 +45,20 @@ const qaSets = [
                     ]
                 },
                 { 
-                    question: "I face a technical problem with Engage?", 
+                    question: "I face a technical problem with VectorDb?", 
                     answer: "Please describe the problem and share a full-page screenshot (including the search bar) of the issue, and the team will be happy to help."
                 },
                 { 
-                    question: "How to start using Engage?", 
-                    answer: "To start using Engage, follow these steps...",
+                    question: "How to start using VectorDb?", 
+                    answer: "To start using VectorDb, follow these steps...",
                     nextSet: [
                         { 
                             question: "Step one", 
-                            answer: "Go to the sidebar and click on the Engage tab.",
+                            answer: "Go to the sidebar and click on the VectorDb tab.",
                             nextSet: [
                                 { 
                                     question: "Step two", 
-                                    answer: "Then follow the instructions provided in the Engage setup wizard."
+                                    answer: "Then follow the instructions provided in the VectorDb setup wizard."
                                 }
                             ]
                         }
