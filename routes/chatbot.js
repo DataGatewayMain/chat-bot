@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
-const morgan = require('morgan');
+const apicache = require("apicache");
+let cache = apicache.middleware
 router.use(bodyParser.json());
-const apicache = require('apicache');
-let cache = apicache.middleware;
+
 // Predefined questions and answers with nested sets
 const qaSets = [
     [
@@ -71,14 +71,11 @@ const qaSets = [
 ];
 
 // Endpoint to get the initial set of questions
-// router.get("/questions", (req, res) => {
-//     const questions = qaSets[0].map(pair => pair.question);
-//     res.json({ questions });
-// });
-router.get("/questions", cache('1 minutes'), (req, res) => {
+router.get("/questions", cache('3 seconds'), (req, res) => {
     const questions = qaSets[0].map(pair => pair.question);
     res.json({ questions });
 });
+
 
 // Endpoint to handle user responses and return the next set of questions
 router.post("/chat", (req, res) => {

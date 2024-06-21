@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var chatRouter=  require('./routes/chatbot')
 const morgan = require("morgan");
-const apicache = require("apicache");
+// const apicache = require("apicache");
 
 var app = express();
 app.use(cors())
@@ -18,10 +18,10 @@ app.set('view engine', 'jade');
 app.use(morgan('dev'));
  
 //configure apicache 
-let cache = apicache.middleware
+// let cache = apicache.middleware
  
 //caching all routes for 5 minutes
-app.use(cache('1 minutes'))
+// app.use(cache('3 seconds'))
 
 app.use(logger('dev'));
 app.use(express.json());
